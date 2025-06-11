@@ -1,0 +1,17 @@
+(executable
+ (public_name todo-ocaml)
+ (name main)
+ (libraries)
+)
+
+(executable
+ (public_name coffee)
+ (name coffee)
+ (libraries notty notty.unix fmt)
+)
+
+(executable
+ (public_name soda)
+ (name soda)
+ (libraries fmt)
+)
