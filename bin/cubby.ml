@@ -8,13 +8,19 @@ let rec count_width lines =
   | [ line ] -> String.length line
   | line :: rest -> Int.max (String.length line) (count_width rest)
 
+let rec make_unicode_string count str =
+  match count with
+    | 0 -> str ^ str
+    | _ -> str ^ (make_unicode_string (count - 1) str)
+
+let print_in_cubby pad str =
+  print_endline ("\x1b[31m┃\x1b[0m" ^ (String.make pad ' ') ^ str ^ (String.make pad ' ') ^ "\x1b[31m┃\x1b[0m")
+
 let cubby_hole contents =
-  (** The width of the provided contents in bytes? *)
   let width = count_width contents in
-  (* BUG: the horizontal line is not a valid character, it must be treated as a string *)
-  print_endline ("\x1b[31m┏" ^ (String.make width '━') ^ "┓\x1b[0m");
-  print_endline (Int.to_string width);
-  print_endline "\x1b[31m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\x1b[0m"
+  print_endline ("\x1b[31m┏" ^ (make_unicode_string width "━") ^ "┓\x1b[0m");
+  List.iter (print_in_cubby 1) contents;
+  print_endline ("\x1b[31m┗" ^ (make_unicode_string width "━") ^ "┛\x1b[0m")
 
 (* \x1b[0m is the closing tag *)
 
